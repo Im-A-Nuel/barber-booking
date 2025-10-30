@@ -3,9 +3,10 @@
 Barber Booking adalah Mini Project 1 untuk mata kuliah Pemrograman Web Lanjut (PWL) yang membangun fondasi aplikasi booking barbershop berbasis Laravel 6. Fokus saat ini adalah pengelolaan data barber dan penyiapan struktur yang mudah dikembangkan menjadi sistem pemesanan layanan.
 
 ## Fitur Utama
+- Manajemen layanan barbershop melalui modul Services (model `app/Service.php`, migrasi `database/migrations/2025_10_30_000000_create_services_table.php`, resource controller & tampilan Blade).
 - Manajemen data barber melalui model `app/Barber.php` dan migrasi `database/migrations/2025_10_28_112930_create_barbers_tabel.php`.
 - Kolom-kolom penting meliputi nama, spesialisasi, tahun pengalaman, nomor telepon, rata-rata rating, dan status aktif.
-- Seeder contoh (`BarberFakerSeeder`) untuk menghasilkan hingga 50 barber dummy sehingga pengujian awal lebih mudah.
+- Seeder contoh (`ServiceSeeder`, `BarberFakerSeeder`) untuk menghasilkan data dummy sehingga pengujian awal lebih mudah.
 - Konfigurasi dasar Laravel (auth scaffolding, logging, queue, jobs) siap dipakai ketika modul lanjutan ditambahkan.
 
 ## Persyaratan Sistem
@@ -52,10 +53,13 @@ php artisan serve
 Aplikasi dapat diakses di `http://localhost:8000`.
 
 ## Struktur Direktori Penting
+- `app/Service.php` - Model Eloquent untuk entitas layanan.
 - `app/Barber.php` - Model Eloquent untuk entitas barber.
+- `database/migrations/2025_10_30_000000_create_services_table.php` - Skema tabel `services`.
 - `database/migrations/2025_10_28_112930_create_barbers_tabel.php` - Skema tabel `barbers`.
-- `database/seeds/BarberFakerSeeder.php` - Seeder data dummy berbasis Faker.
-- `resources/views` - Tempat untuk menambahkan antarmuka Blade.
+- `database/seeds/ServiceSeeder.php`, `database/seeds/BarberFakerSeeder.php` - Seeder data dummy berbasis Faker.
+- `resources/views/services` - Halaman CRUD admin untuk layanan.
+- `resources/views` - Tempat untuk menambahkan antarmuka Blade lainnya.
 - `routes/web.php` - Titik awal menambahkan rute web atau dashboard booking.
 
 ## Pengembangan Lanjutan
@@ -65,9 +69,9 @@ Aplikasi dapat diakses di `http://localhost:8000`.
 - Membangun tampilan dashboard manajemen dan halaman landing page.
 
 ## Testing
-Gunakan PHPUnit atau perintah artisan:
+Jalankan seluruh pengujian dengan:
 ```bash
-php artisan test
+vendor/bin/phpunit
 ```
 
 ## Lisensi
