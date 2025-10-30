@@ -1,78 +1,74 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Barber Booking
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Barber Booking adalah Mini Project 1 untuk mata kuliah Pemrograman Web Lanjut (PWL) yang membangun fondasi aplikasi booking barbershop berbasis Laravel 6. Fokus saat ini adalah pengelolaan data barber dan penyiapan struktur yang mudah dikembangkan menjadi sistem pemesanan layanan.
 
-## About Laravel
+## Fitur Utama
+- Manajemen data barber melalui model `app/Barber.php` dan migrasi `database/migrations/2025_10_28_112930_create_barbers_tabel.php`.
+- Kolom-kolom penting meliputi nama, spesialisasi, tahun pengalaman, nomor telepon, rata-rata rating, dan status aktif.
+- Seeder contoh (`BarberFakerSeeder`) untuk menghasilkan hingga 50 barber dummy sehingga pengujian awal lebih mudah.
+- Konfigurasi dasar Laravel (auth scaffolding, logging, queue, jobs) siap dipakai ketika modul lanjutan ditambahkan.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Persyaratan Sistem
+- PHP 7.2.5 ke atas (disarankan PHP 8.0)
+- Composer
+- MySQL / MariaDB
+- Node.js & npm (opsional untuk kompilasi asset memakai Laravel Mix)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Langkah Instalasi
+1. Clone repositori lalu masuk ke folder proyek.
+2. Install dependency PHP:
+   ```bash
+   composer install
+   ```
+3. Salin file lingkungan kemudian atur koneksi basis data:
+   ```bash
+   cp .env.example .env   # atau duplikasi manual di Windows
+   ```
+   Sesuaikan `DB_DATABASE`, `DB_USERNAME`, dan `DB_PASSWORD` dengan server lokal.
+4. Generate application key (lewati jika `APP_KEY` sudah ada di `.env`):
+   ```bash
+   php artisan key:generate
+   ```
+5. Jalankan migrasi untuk membuat tabel:
+   ```bash
+   php artisan migrate
+   ```
+6. (Opsional) Isi data dummy memakai seeder:
+   ```bash
+   php artisan db:seed --class=BarberFakerSeeder
+   ```
+   Untuk satu contoh barber statis gunakan `BarbersSeeder`.
+7. (Opsional) Instal dependency front-end dan kompilasi asset:
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Menjalankan Aplikasi
+Gunakan server development Laravel:
+```bash
+php artisan serve
+```
+Aplikasi dapat diakses di `http://localhost:8000`.
 
-## Learning Laravel
+## Struktur Direktori Penting
+- `app/Barber.php` - Model Eloquent untuk entitas barber.
+- `database/migrations/2025_10_28_112930_create_barbers_tabel.php` - Skema tabel `barbers`.
+- `database/seeds/BarberFakerSeeder.php` - Seeder data dummy berbasis Faker.
+- `resources/views` - Tempat untuk menambahkan antarmuka Blade.
+- `routes/web.php` - Titik awal menambahkan rute web atau dashboard booking.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Pengembangan Lanjutan
+- Membuat modul booking lengkap (slot layanan, jadwal barber, histori transaksi).
+- Menambahkan autentikasi terpisah untuk customer dan barber.
+- Menyediakan API JSON agar mudah diintegrasikan dengan aplikasi mobile.
+- Membangun tampilan dashboard manajemen dan halaman landing page.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Testing
+Gunakan PHPUnit atau perintah artisan:
+```bash
+php artisan test
+```
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Lisensi
+Proyek mengikuti lisensi MIT yang dibawa oleh kerangka Laravel.
