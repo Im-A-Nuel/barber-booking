@@ -50,6 +50,14 @@
                                     <i class="fas fa-calendar-alt"></i> Kelola Jadwal
                                 </a>
                             @endif
+                            @if(Auth::user()->isCustomer())
+                                <a class="dropdown-item" href="{{ route('bookings.index') }}">
+                                    <i class="fas fa-calendar-check"></i> Booking Saya
+                                </a>
+                                <a class="dropdown-item" href="{{ route('bookings.create') }}">
+                                    <i class="fas fa-calendar-plus"></i> Buat Booking
+                                </a>
+                            @endif
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -68,8 +76,16 @@
     <main class="py-4">
         <div class="container">
             @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
+                <div class="alert alert-success alert-dismissible fade show">
+                    <i class="fas fa-check-circle"></i> {{ session('status') }}
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
                 </div>
             @endif
 
@@ -79,5 +95,6 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    @yield('scripts')
 </body>
 </html>

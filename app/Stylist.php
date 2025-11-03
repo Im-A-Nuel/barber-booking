@@ -42,4 +42,12 @@ class Stylist extends Model
     {
         return $this->hasMany(Schedule::class);
     }
+
+    /**
+     * Get the bookings for the stylist.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }
