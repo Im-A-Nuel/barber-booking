@@ -66,4 +66,12 @@ class User extends Authenticatable
     {
         return $this->role === 'customer';
     }
+
+    /**
+     * Get the stylist profile associated with the user.
+     */
+    public function stylist()
+    {
+        return $this->hasOne(Stylist::class);
+    }
 }
