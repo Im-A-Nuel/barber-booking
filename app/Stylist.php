@@ -34,4 +34,12 @@ class Stylist extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the schedules for the stylist.
+     */
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class);
+    }
 }

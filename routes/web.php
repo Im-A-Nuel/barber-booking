@@ -26,4 +26,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('services', 'ServiceController')->except(['show']);
     Route::resource('stylists', 'StylistController')->except(['show']);
+    Route::resource('schedules', 'ScheduleController')->except(['show']);
 });

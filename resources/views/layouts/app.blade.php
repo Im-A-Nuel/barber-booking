@@ -46,6 +46,9 @@
                                 <a class="dropdown-item" href="{{ route('stylists.index') }}">
                                     <i class="fas fa-user-tie"></i> Kelola Stylist
                                 </a>
+                                <a class="dropdown-item" href="{{ route('schedules.index') }}">
+                                    <i class="fas fa-calendar-alt"></i> Kelola Jadwal
+                                </a>
                             @endif
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('logout') }}"
