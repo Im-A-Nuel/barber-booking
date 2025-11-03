@@ -4,8 +4,10 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3 mb-0">Kelola Layanan</h1>
-        <a href="{{ route('services.create') }}" class="btn btn-primary">Tambah Layanan</a>
+        <h1 class="h3 mb-0"><i class="fas fa-list"></i> Kelola Layanan</h1>
+        <a href="{{ route('services.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Layanan
+        </a>
     </div>
 
     <form method="GET" action="{{ route('services.index') }}" class="form-inline mb-3">
@@ -20,7 +22,9 @@
                 value="{{ $search }}"
             >
         </div>
-        <button type="submit" class="btn btn-outline-secondary">Cari</button>
+        <button type="submit" class="btn btn-outline-secondary">
+            <i class="fas fa-search"></i> Cari
+        </button>
     </form>
 
     <div class="table-responsive">
@@ -46,11 +50,15 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <a href="{{ route('services.edit', $service) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a href="{{ route('services.edit', $service) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
                             <form action="{{ route('services.destroy', $service) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus layanan ini?');">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger" type="submit">Hapus</button>
+                                <button class="btn btn-sm btn-outline-danger" type="submit">
+                                    <i class="fas fa-trash"></i> Hapus
+                                </button>
                             </form>
                         </td>
                     </tr>

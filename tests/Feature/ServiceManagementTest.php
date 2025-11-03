@@ -3,12 +3,27 @@
 namespace Tests\Feature;
 
 use App\Service;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ServiceManagementTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Create an admin user for testing
+        $this->admin = User::create([
+            'name' => 'Admin Test',
+            'username' => 'admintest',
+            'email' => 'admin@test.com',
+            'role' => 'admin',
+            'password' => bcrypt('password'),
+        ]);
+    }
 
     /** @test */
     public function it_displays_service_list()
@@ -20,7 +35,7 @@ class ServiceManagementTest extends TestCase
             'is_active' => true,
         ]);
 
-        $response = $this->get('/services');
+        $response = $this->actingAs($this->admin)->get('/services');
 
         $response->assertStatus(200);
         $response->assertSee($service->name);
@@ -29,7 +44,7 @@ class ServiceManagementTest extends TestCase
     /** @test */
     public function it_creates_a_service()
     {
-        $response = $this->post('/services', [
+        $response = $this->actingAs($this->admin)->post('/services', [
             'name' => 'New Style',
             'duration_minutes' => 60,
             'price' => 75000,
@@ -55,7 +70,7 @@ class ServiceManagementTest extends TestCase
             'is_active' => true,
         ]);
 
-        $response = $this->put("/services/{$service->id}", [
+        $response = $this->actingAs($this->admin)->put("/services/{$service->id}", [
             'name' => 'Basic Cut Plus',
             'duration_minutes' => 45,
             'price' => 65000,
@@ -82,11 +97,35 @@ class ServiceManagementTest extends TestCase
             'is_active' => true,
         ]);
 
-        $response = $this->delete("/services/{$service->id}");
+        $response = $this->actingAs($this->admin)->delete("/services/{$service->id}");
 
         $response->assertRedirect(route('services.index'));
         $this->assertDatabaseMissing('services', [
             'id' => $service->id,
         ]);
+    }
+
+    /** @test */
+    public function non_admin_cannot_access_services()
+    {
+        $customer = User::create([
+            'name' => 'Customer Test',
+            'username' => 'customertest',
+            'email' => 'customer@test.com',
+            'role' => 'customer',
+            'password' => bcrypt('password'),
+        ]);
+
+        $response = $this->actingAs($customer)->get('/services');
+
+        $response->assertStatus(403);
+    }
+
+    /** @test */
+    public function guest_cannot_access_services()
+    {
+        $response = $this->get('/services');
+
+        $response->assertRedirect(route('login'));
     }
 }

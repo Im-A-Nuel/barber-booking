@@ -18,13 +18,14 @@ class ServiceController extends Controller
      */
     public function index(Request $request)
     {
+        $search = $request->get('search');
         $query = Service::query()->orderBy('name');
 
-        if ($search = $request->get('search')) {
+        if (!empty($search)) {
             $query->where('name', 'like', '%' . $search . '%');
         }
 
-        $services = $query->paginate(10)->appends(['search' => $search]);
+        $services = $query->paginate(10)->appends($request->only('search'));
 
         return view('services.index', compact('services', 'search'));
     }

@@ -13,8 +13,7 @@ class StoreServiceRequest extends FormRequest
      */
     public function authorize()
     {
-        // TODO: Integrate with role-based authorization when available.
-        return true;
+        return auth()->check() && auth()->user()->isAdmin();
     }
 
     /**

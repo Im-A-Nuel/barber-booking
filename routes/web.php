@@ -11,7 +11,18 @@
 |
 */
 
-Route::redirect('/', '/services');
+Auth::routes();
 
-Route::resource('services', 'ServiceController')->except(['show']);
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect('/services');
+    }
+    return redirect('/login');
+});
 
+Route::get('/home', 'HomeController@index')->name('home');
+
+// Admin only routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('services', 'ServiceController')->except(['show']);
+});
