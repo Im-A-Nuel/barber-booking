@@ -119,7 +119,7 @@ class StoreBookingRequest extends FormRequest
 
                     // Check for overlapping bookings
                     $hasConflict = \App\Booking::where('stylist_id', $this->stylist_id)
-                        ->where('booking_date', $this->booking_date)
+                        ->whereDate('booking_date', $this->booking_date)
                         ->whereIn('status', [\App\Booking::STATUS_PENDING, \App\Booking::STATUS_CONFIRMED])
                         ->where(function ($query) use ($startTime, $endTime) {
                             $query->where(function ($q) use ($startTime, $endTime) {

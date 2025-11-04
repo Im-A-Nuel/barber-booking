@@ -249,7 +249,7 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         // Ensure customer can only view their own bookings
-        if ($booking->customer_id !== auth()->id() && !auth()->user()->isAdmin()) {
+        if ($booking->customer_id != auth()->id() && !auth()->user()->isAdmin()) {
             abort(403);
         }
 
@@ -267,7 +267,7 @@ class BookingController extends Controller
     public function cancel(Booking $booking)
     {
         // Ensure customer can only cancel their own bookings
-        if ($booking->customer_id !== auth()->id()) {
+        if ($booking->customer_id != auth()->id()) {
             abort(403);
         }
 

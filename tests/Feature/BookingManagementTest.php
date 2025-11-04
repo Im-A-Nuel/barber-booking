@@ -121,11 +121,11 @@ class BookingManagementTest extends TestCase
     {
         $nextMonday = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
 
-        $response = $this->actingAs($this->customer)->get('/bookings/available-slots', [
+        $response = $this->actingAs($this->customer)->get('/bookings/available-slots?' . http_build_query([
             'service_id' => $this->service->id,
             'stylist_id' => $this->stylist->id,
             'date' => $nextMonday,
-        ]);
+        ]));
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -151,8 +151,10 @@ class BookingManagementTest extends TestCase
             'customer_id' => $this->customer->id,
             'service_id' => $this->service->id,
             'stylist_id' => $this->stylist->id,
-            'booking_date' => $nextMonday,
+            'start_time' => '10:00',
+            'end_time' => '10:30',
             'status' => Booking::STATUS_PENDING,
+            'notes' => 'Test booking',
         ]);
     }
 
