@@ -74,4 +74,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(Stylist::class);
     }
+
+    /**
+     * Get the bookings for the user (as customer).
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'customer_id');
+    }
 }

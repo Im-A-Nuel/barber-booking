@@ -18,4 +18,12 @@ class Service extends Model
         'price' => 'integer',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the bookings for the service.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }
