@@ -23,6 +23,15 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // Redirect based on user role
+        if (auth()->user()->isAdmin() || auth()->user()->isStylist()) {
+            return redirect()->route('admin.bookings.index');
+        }
+
+        if (auth()->user()->isCustomer()) {
+            return redirect()->route('bookings.index');
+        }
+
         return view('home');
     }
 }

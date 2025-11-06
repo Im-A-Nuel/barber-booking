@@ -40,6 +40,9 @@
                                 <i class="fas fa-home"></i> Dashboard
                             </a>
                             @if(Auth::user()->isAdmin())
+                                <a class="dropdown-item" href="{{ route('users.index') }}">
+                                    <i class="fas fa-users"></i> Kelola User
+                                </a>
                                 <a class="dropdown-item" href="{{ route('services.index') }}">
                                     <i class="fas fa-list"></i> Kelola Service
                                 </a>
@@ -48,6 +51,11 @@
                                 </a>
                                 <a class="dropdown-item" href="{{ route('schedules.index') }}">
                                     <i class="fas fa-calendar-alt"></i> Kelola Jadwal
+                                </a>
+                            @endif
+                            @if(Auth::user()->isAdmin() || Auth::user()->isStylist())
+                                <a class="dropdown-item" href="{{ route('admin.bookings.index') }}">
+                                    <i class="fas fa-calendar-check"></i> Kelola Booking
                                 </a>
                             @endif
                             @if(Auth::user()->isCustomer())

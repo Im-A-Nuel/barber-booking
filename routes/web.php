@@ -15,7 +15,12 @@ Auth::routes();
 
 Route::get('/', function () {
     if (auth()->check()) {
-        return redirect('/services');
+        if (auth()->user()->isAdmin() || auth()->user()->isStylist()) {
+            return redirect()->route('admin.bookings.index');
+        }
+        if (auth()->user()->isCustomer()) {
+            return redirect()->route('bookings.index');
+        }
     }
     return redirect('/login');
 });
@@ -24,9 +29,18 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // Admin only routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('users', 'UserController')->except(['show']);
     Route::resource('services', 'ServiceController')->except(['show']);
     Route::resource('stylists', 'StylistController')->except(['show']);
     Route::resource('schedules', 'ScheduleController')->except(['show']);
+});
+
+// Admin & Stylist routes for booking management
+Route::middleware(['auth', 'role:admin,stylist'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/bookings', 'Admin\BookingManagementController@index')->name('bookings.index');
+    Route::patch('/bookings/{booking}/confirm', 'Admin\BookingManagementController@confirm')->name('bookings.confirm');
+    Route::patch('/bookings/{booking}/complete', 'Admin\BookingManagementController@complete')->name('bookings.complete');
+    Route::patch('/bookings/{booking}/cancel', 'Admin\BookingManagementController@cancel')->name('bookings.cancel');
 });
 
 // Customer only routes
