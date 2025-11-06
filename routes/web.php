@@ -54,3 +54,13 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/bookings/{booking}', 'BookingController@show')->name('bookings.show');
     Route::post('/bookings/{booking}/cancel', 'BookingController@cancel')->name('bookings.cancel');
 });
+
+// Payment routes (Customer & Admin)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payments', 'PaymentController@index')->name('payments.index');
+    Route::get('/payments/{booking}/create', 'PaymentController@create')->name('payments.create');
+    Route::post('/payments/{booking}', 'PaymentController@store')->name('payments.store');
+    Route::get('/payments/{payment}/edit', 'PaymentController@edit')->name('payments.edit');
+    Route::put('/payments/{payment}', 'PaymentController@update')->name('payments.update');
+    Route::get('/payments/{payment}/receipt', 'PaymentController@showReceipt')->name('payments.receipt');
+});

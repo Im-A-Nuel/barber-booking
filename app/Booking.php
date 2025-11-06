@@ -62,6 +62,14 @@ class Booking extends Model
     }
 
     /**
+     * Get the payment for this booking.
+     */
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    /**
      * Get status label in Indonesian.
      *
      * @return string
