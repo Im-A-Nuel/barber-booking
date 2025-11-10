@@ -1,0 +1,21 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Midtrans Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for Midtrans payment gateway integration.
+    | Get your API keys from Midtrans Dashboard: https://dashboard.midtrans.com/
+    |
+    */
+
+    'server_key' => env('MIDTRANS_SERVER_KEY'),
+    'client_key' => env('MIDTRANS_CLIENT_KEY'),
+    'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+    'is_sanitized' => true,
+    'is_3ds' => true,
+
+];

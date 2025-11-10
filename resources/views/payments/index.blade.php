@@ -80,6 +80,7 @@
                                 <th>Layanan</th>
                                 <th>Jumlah</th>
                                 <th>Metode</th>
+                                <th>Tipe</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -125,6 +126,18 @@
                                         @endswitch
                                     </td>
                                     <td>
+                                        @if($payment->payment_type === 'gateway')
+                                            <span class="badge badge-info">Gateway</span>
+                                            @if($payment->gateway_name)
+                                                <br><small class="text-muted">{{ ucfirst($payment->gateway_name) }}</small>
+                                            @endif
+                                        @elseif($payment->payment_type === 'crypto')
+                                            <span class="badge badge-warning">Crypto</span>
+                                        @else
+                                            <span class="badge badge-secondary">Manual</span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         @switch($payment->status)
                                             @case('paid')
                                                 <span class="badge badge-success">Lunas</span>
@@ -143,21 +156,32 @@
                                         @endswitch
                                     </td>
                                     <td>
-                                        <div class="btn-group" role="group">
+                                        <div class="btn-group-vertical btn-group-sm" role="group">
                                             <a href="{{ route('bookings.show', $payment->booking_id) }}"
                                                class="btn btn-sm btn-outline-primary"
                                                title="Lihat Detail Booking">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            @if(in_array($payment->status, ['pending', 'failed']))
+                                            @if(in_array($payment->status, ['pending', 'failed']) && $payment->payment_type === 'manual')
                                                 <a href="{{ route('payments.edit', $payment->id) }}"
                                                    class="btn btn-sm btn-outline-warning"
                                                    title="Update Status Pembayaran">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             @endif
+                                            @if($payment->status === 'pending' && $payment->payment_type === 'gateway')
+                                                <form action="{{ route('payments.simulate-success', $payment->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-success"
+                                                            title="Simulasi Pembayaran Sukses (Demo)"
+                                                            onclick="return confirm('Simulasikan pembayaran sebagai sukses?')">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                             <a href="{{ route('payments.receipt', $payment->id) }}"
-                                               class="btn btn-sm btn-outline-success"
+                                               class="btn btn-sm btn-outline-info"
                                                title="Lihat Bukti Pembayaran">
                                                 <i class="fas fa-receipt"></i>
                                             </a>

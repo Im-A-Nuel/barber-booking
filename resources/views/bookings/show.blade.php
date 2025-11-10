@@ -134,14 +134,64 @@
                                 <td>{{ $booking->payment->paid_at->format('d M Y H:i') }}</td>
                             </tr>
                         @endif
+                        @if ($booking->payment->payment_type && $booking->payment->payment_type !== 'manual')
+                            <tr>
+                                <th>Tipe Pembayaran:</th>
+                                <td>
+                                    @if ($booking->payment->payment_type === 'gateway')
+                                        <span class="badge badge-info">Payment Gateway</span>
+                                        @if ($booking->payment->gateway_name)
+                                            ({{ ucfirst($booking->payment->gateway_name) }})
+                                        @endif
+                                    @elseif ($booking->payment->payment_type === 'crypto')
+                                        <span class="badge badge-warning">Cryptocurrency</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
+                        @if ($booking->payment->transaction_id && $booking->payment->payment_type !== 'manual')
+                            <tr>
+                                <th>Transaction ID:</th>
+                                <td><code>{{ $booking->payment->transaction_id }}</code></td>
+                            </tr>
+                        @endif
                     </table>
+                    @if ($booking->payment->status === 'pending' && $booking->payment->payment_type === 'gateway')
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> Pembayaran sedang menunggu konfirmasi.
+                            <div class="mt-2">
+                                <a href="{{ route('payments.check-status', $booking->payment->id) }}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-sync"></i> Cek Status Pembayaran
+                                </a>
+                                <form action="{{ route('payments.simulate-success', $booking->payment->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Simulasikan pembayaran sebagai sukses? (Untuk demo/testing saja)')">
+                                        <i class="fas fa-check-circle"></i> Simulasi Pembayaran Sukses (Demo)
+                                    </button>
+                                </form>
+                            </div>
+                            <small class="text-muted d-block mt-2">
+                                <i class="fas fa-info-circle"></i> Gunakan tombol "Simulasi" untuk demo tanpa perlu bayar di Midtrans
+                            </small>
+                        </div>
+                    @endif
                 @else
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i> Pembayaran belum dicatat.
                         @if (in_array($booking->status, [\App\Booking::STATUS_CONFIRMED, \App\Booking::STATUS_COMPLETED]) && ($booking->customer_id === auth()->id() || auth()->user()->isAdmin()))
-                            <a href="{{ route('payments.create', $booking->id) }}" class="btn btn-sm btn-primary ml-2">
-                                <i class="fas fa-plus"></i> Catat Pembayaran
-                            </a>
+                            <div class="mt-3">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('payments.create', $booking->id) }}" class="btn btn-sm btn-success">
+                                        <i class="fas fa-money-bill"></i> Bayar Manual
+                                    </a>
+                                    <a href="{{ route('payments.gateway', $booking->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-credit-card"></i> Bayar via Gateway
+                                    </a>
+                                </div>
+                                <small class="d-block mt-2 text-muted">
+                                    Pilih "Bayar via Gateway" untuk pembayaran online (GoPay, ShopeePay, Transfer Bank, dll)
+                                </small>
+                            </div>
                         @endif
                     </div>
                 @endif
