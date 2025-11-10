@@ -19,7 +19,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        $bookings = Booking::with(['service', 'stylist.user'])
+        $bookings = Booking::with(['service', 'stylist.user', 'payment'])
             ->where('customer_id', auth()->id())
             ->orderBy('booking_date', 'desc')
             ->orderBy('start_time', 'desc')
@@ -253,7 +253,7 @@ class BookingController extends Controller
             abort(403);
         }
 
-        $booking->load(['service', 'stylist.user', 'customer']);
+        $booking->load(['service', 'stylist.user', 'customer', 'payment']);
 
         return view('bookings.show', compact('booking'));
     }

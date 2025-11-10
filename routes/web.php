@@ -1,15 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Auth::routes();
 
@@ -54,3 +44,21 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/bookings/{booking}', 'BookingController@show')->name('bookings.show');
     Route::post('/bookings/{booking}/cancel', 'BookingController@cancel')->name('bookings.cancel');
 });
+
+// Payment routes (Customer & Admin)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payments', 'PaymentController@index')->name('payments.index');
+    Route::get('/payments/{booking}/create', 'PaymentController@create')->name('payments.create');
+    Route::post('/payments/{booking}', 'PaymentController@store')->name('payments.store');
+    Route::get('/payments/{payment}/edit', 'PaymentController@edit')->name('payments.edit');
+    Route::put('/payments/{payment}', 'PaymentController@update')->name('payments.update');
+    Route::get('/payments/{payment}/receipt', 'PaymentController@showReceipt')->name('payments.receipt');
+
+    // Payment Gateway routes
+    Route::get('/payments/{booking}/gateway', 'PaymentController@createWithGateway')->name('payments.gateway');
+    Route::get('/payments/{payment}/check-status', 'PaymentController@checkStatus')->name('payments.check-status');
+    Route::post('/payments/{payment}/simulate-success', 'PaymentController@simulateSuccess')->name('payments.simulate-success');
+});
+
+// Midtrans callback (no auth middleware needed for webhook)
+Route::post('/payments/midtrans/callback', 'PaymentController@midtransCallback')->name('payments.midtrans.callback');

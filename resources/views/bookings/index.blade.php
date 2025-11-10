@@ -32,18 +32,25 @@
                                 <i class="fas fa-sticky-note"></i> {{ $booking->notes }}
                             </p>
                         @endif
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a href="{{ route('bookings.show', $booking) }}" class="btn btn-sm btn-outline-primary">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap">
+                            <a href="{{ route('bookings.show', $booking) }}" class="btn btn-sm btn-outline-primary mb-1">
                                 <i class="fas fa-eye"></i> Detail
                             </a>
-                            @if ($booking->canBeCancelled())
-                                <form action="{{ route('bookings.cancel', $booking) }}" method="POST" class="d-inline" onsubmit="return confirm('Batalkan booking ini?');">
-                                    @csrf
-                                    <button class="btn btn-sm btn-outline-danger" type="submit">
-                                        <i class="fas fa-times"></i> Batalkan
-                                    </button>
-                                </form>
-                            @endif
+                            <div>
+                                @if (in_array($booking->status, [\App\Booking::STATUS_CONFIRMED, \App\Booking::STATUS_COMPLETED]) && !$booking->payment)
+                                    <a href="{{ route('payments.create', $booking->id) }}" class="btn btn-sm btn-success mb-1">
+                                        <i class="fas fa-money-bill-wave"></i> Bayar
+                                    </a>
+                                @endif
+                                @if ($booking->canBeCancelled())
+                                    <form action="{{ route('bookings.cancel', $booking) }}" method="POST" class="d-inline" onsubmit="return confirm('Batalkan booking ini?');">
+                                        @csrf
+                                        <button class="btn btn-sm btn-outline-danger mb-1" type="submit">
+                                            <i class="fas fa-times"></i> Batalkan
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

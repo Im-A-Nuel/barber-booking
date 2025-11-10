@@ -65,6 +65,14 @@
                                 <a class="dropdown-item" href="{{ route('bookings.create') }}">
                                     <i class="fas fa-calendar-plus"></i> Buat Booking
                                 </a>
+                                <a class="dropdown-item" href="{{ route('payments.index') }}">
+                                    <i class="fas fa-money-bill-wave"></i> Riwayat Pembayaran
+                                </a>
+                            @endif
+                            @if(Auth::user()->isAdmin())
+                                <a class="dropdown-item" href="{{ route('payments.index') }}">
+                                    <i class="fas fa-money-bill-wave"></i> Semua Pembayaran
+                                </a>
                             @endif
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ route('logout') }}"
