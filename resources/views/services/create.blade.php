@@ -10,7 +10,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('services.store') }}">
+    <form method="POST" action="{{ route('services.store') }}" enctype="multipart/form-data">
         @csrf
         @include('services._form', ['service' => null])
 

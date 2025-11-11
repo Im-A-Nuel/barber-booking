@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Requests\User\StoreUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -62,6 +63,12 @@ class UserController extends Controller
         // Hash password
         $data['password'] = Hash::make($data['password']);
 
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $data['image'] = $imagePath;
+        }
+
         User::create($data);
 
         return redirect()->route('users.index')
@@ -110,6 +117,17 @@ class UserController extends Controller
             unset($data['password']);
         }
 
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($user->image && Storage::disk('public')->exists($user->image)) {
+                Storage::disk('public')->delete($user->image);
+            }
+
+            $imagePath = $request->file('image')->store('images', 'public');
+            $data['image'] = $imagePath;
+        }
+
         $user->update($data);
 
         return redirect()->route('users.index')
@@ -140,6 +158,11 @@ class UserController extends Controller
         if ($user->isCustomer() && $user->bookings()->exists()) {
             return redirect()->back()
                 ->with('error', 'User ini memiliki riwayat booking. Tidak dapat dihapus.');
+        }
+
+        // Delete image if exists
+        if ($user->image && Storage::disk('public')->exists($user->image)) {
+            Storage::disk('public')->delete($user->image);
         }
 
         $user->delete();

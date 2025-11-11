@@ -19,8 +19,15 @@
             <label for="service_id">Pilih Layanan <span class="text-danger">*</span></label>
             <div class="row">
                 @foreach ($services as $service)
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 col-lg-3 mb-3">
                         <div class="card h-100 {{ old('service_id') == $service->id ? 'border-primary' : '' }}">
+                            @if($service->image)
+                                <img src="{{ asset('storage/' . $service->image) }}" class="card-img-top" alt="{{ $service->name }}" style="height: 100px; object-fit: cover;">
+                            @else
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 100px;">
+                                    <i class="fas fa-image fa-2x text-muted"></i>
+                                </div>
+                            @endif
                             <div class="card-body">
                                 <div class="custom-control custom-radio">
                                     <input

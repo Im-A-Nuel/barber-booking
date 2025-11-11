@@ -7,6 +7,7 @@ use App\Http\Requests\Service\UpdateServiceRequest;
 use App\Service;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
@@ -48,7 +49,15 @@ class ServiceController extends Controller
      */
     public function store(StoreServiceRequest $request)
     {
-        Service::create($this->normalizePayload($request));
+        $data = $this->normalizePayload($request);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        Service::create($data);
 
         return redirect()
             ->route('services.index')
@@ -75,7 +84,20 @@ class ServiceController extends Controller
      */
     public function update(UpdateServiceRequest $request, Service $service)
     {
-        $service->update($this->normalizePayload($request));
+        $data = $this->normalizePayload($request);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($service->image && Storage::disk('public')->exists($service->image)) {
+                Storage::disk('public')->delete($service->image);
+            }
+
+            $imagePath = $request->file('image')->store('images', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $service->update($data);
 
         return redirect()
             ->route('services.index')
@@ -90,6 +112,11 @@ class ServiceController extends Controller
      */
     public function destroy(Service $service)
     {
+        // Delete image if exists
+        if ($service->image && Storage::disk('public')->exists($service->image)) {
+            Storage::disk('public')->delete($service->image);
+        }
+
         $service->delete();
 
         return redirect()

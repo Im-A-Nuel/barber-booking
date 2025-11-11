@@ -62,6 +62,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Foto</th>
                                         <th>Nama</th>
                                         <th>Email</th>
                                         <th>Username</th>
@@ -74,6 +75,13 @@
                                     @foreach($users as $user)
                                         <tr>
                                             <td>{{ $user->id }}</td>
+                                            <td>
+                                                @if($user->image)
+                                                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="img-thumbnail" style="max-width: 50px; max-height: 50px;">
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <strong>{{ $user->name }}</strong>
                                             </td>

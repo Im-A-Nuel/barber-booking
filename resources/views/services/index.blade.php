@@ -31,6 +31,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Gambar</th>
                     <th>Nama</th>
                     <th>Durasi</th>
                     <th>Harga</th>
@@ -41,6 +42,13 @@
             <tbody>
                 @forelse ($services as $service)
                     <tr>
+                        <td>
+                            @if($service->image)
+                                <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->name }}" class="img-thumbnail" style="max-width: 60px; max-height: 60px;">
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
                         <td>{{ $service->name }}</td>
                         <td>{{ $service->duration_minutes }} menit</td>
                         <td>Rp {{ number_format($service->price, 0, ',', '.') }}</td>
@@ -64,7 +72,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">Belum ada layanan.</td>
+                        <td colspan="6" class="text-center">Belum ada layanan.</td>
                     </tr>
                 @endforelse
             </tbody>
