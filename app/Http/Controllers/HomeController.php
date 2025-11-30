@@ -25,19 +25,19 @@ class HomeController extends Controller
     {
         // Redirect berdasarkan peran pengguna
         if (auth()->user()->isAdmin()) {
-            return redirect()->route('admin.bookings.index');
+            return redirect()->route('dashboard.admin');
         }
 
         if (auth()->user()->isStylist()) {
             // Cek jika stylist memiliki profil sebelum mengalihkan
             if (auth()->user()->stylist) {
-                return redirect()->route('admin.bookings.index');
+                return redirect()->route('dashboard.admin');
             }
             // Jika tidak ada profil stylist, tetap di halaman beranda untuk menampilkan pesan kesalahan
         }
 
         if (auth()->user()->isCustomer()) {
-            return redirect()->route('bookings.index');
+            return redirect()->route('dashboard.customer');
         }
 
         return view('home');

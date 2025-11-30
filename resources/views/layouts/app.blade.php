@@ -261,11 +261,19 @@
                 <h3>Barber Booking</h3>
             </div>
             <ul class="sidebar-menu">
-                <li>
-                    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
-                        <i class="fas fa-home"></i> Dashboard
-                    </a>
-                </li>
+                @if(Auth::user()->isAdmin() || Auth::user()->isStylist())
+                    <li>
+                        <a href="{{ route('dashboard.admin') }}" class="{{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                @elseif(Auth::user()->isCustomer())
+                    <li>
+                        <a href="{{ route('dashboard.customer') }}" class="{{ request()->routeIs('dashboard.customer') ? 'active' : '' }}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                @endif
                 @if(Auth::user()->isAdmin())
                     <li>
                         <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">

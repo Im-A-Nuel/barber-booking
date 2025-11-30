@@ -6,22 +6,28 @@ Auth::routes();
 Route::get('/', function () {
     if (auth()->check()) {
         if (auth()->user()->isAdmin()) {
-            return redirect()->route('admin.bookings.index');
+            return redirect()->route('dashboard.admin');
         }
         if (auth()->user()->isStylist()) {
             if (auth()->user()->stylist) {
-                return redirect()->route('admin.bookings.index');
+                return redirect()->route('dashboard.admin');
             }
             return redirect()->route('home');
         }
         if (auth()->user()->isCustomer()) {
-            return redirect()->route('bookings.index');
+            return redirect()->route('dashboard.customer');
         }
     }
     return redirect('/login');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Dashboard routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard/admin', 'DashboardController@admin')->name('dashboard.admin')->middleware('role:admin,stylist');
+    Route::get('/dashboard/customer', 'DashboardController@customer')->name('dashboard.customer')->middleware('role:customer');
+});
 
 // Admin 
 Route::middleware(['auth', 'role:admin'])->group(function () {
