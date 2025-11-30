@@ -5,8 +5,14 @@ Auth::routes();
 
 Route::get('/', function () {
     if (auth()->check()) {
-        if (auth()->user()->isAdmin() || auth()->user()->isStylist()) {
+        if (auth()->user()->isAdmin()) {
             return redirect()->route('admin.bookings.index');
+        }
+        if (auth()->user()->isStylist()) {
+            if (auth()->user()->stylist) {
+                return redirect()->route('admin.bookings.index');
+            }
+            return redirect()->route('home');
         }
         if (auth()->user()->isCustomer()) {
             return redirect()->route('bookings.index');
@@ -17,7 +23,7 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-// Admin only routes
+// Admin 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', 'UserController')->except(['show']);
     Route::resource('services', 'ServiceController')->except(['show']);
@@ -33,7 +39,7 @@ Route::middleware(['auth', 'role:admin,stylist'])->prefix('admin')->name('admin.
     Route::patch('/bookings/{booking}/cancel', 'Admin\BookingManagementController@cancel')->name('bookings.cancel');
 });
 
-// Customer only routes
+// Customer 
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/bookings', 'BookingController@index')->name('bookings.index');
     Route::get('/bookings/create', 'BookingController@create')->name('bookings.create');
@@ -60,5 +66,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payments/{payment}/simulate-success', 'PaymentController@simulateSuccess')->name('payments.simulate-success');
 });
 
-// Midtrans callback (no auth middleware needed for webhook)
+// Midtrans 
 Route::post('/payments/midtrans/callback', 'PaymentController@midtransCallback')->name('payments.midtrans.callback');

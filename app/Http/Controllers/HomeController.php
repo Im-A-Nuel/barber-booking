@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Buat instance baru controller ini.
      *
      * @return void
      */
@@ -17,15 +17,23 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Tampilkan dashboard aplikasi.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
-        // Redirect based on user role
-        if (auth()->user()->isAdmin() || auth()->user()->isStylist()) {
+        // Redirect berdasarkan peran pengguna
+        if (auth()->user()->isAdmin()) {
             return redirect()->route('admin.bookings.index');
+        }
+
+        if (auth()->user()->isStylist()) {
+            // Cek jika stylist memiliki profil sebelum mengalihkan
+            if (auth()->user()->stylist) {
+                return redirect()->route('admin.bookings.index');
+            }
+            // Jika tidak ada profil stylist, tetap di halaman beranda untuk menampilkan pesan kesalahan
         }
 
         if (auth()->user()->isCustomer()) {

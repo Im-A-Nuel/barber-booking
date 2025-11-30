@@ -54,4 +54,22 @@ class StorePaymentRequest extends FormRequest
             'status' => 'status pembayaran',
         ];
     }
+
+    /**
+     * Sanitize the incoming payload before validation.
+     *
+     * Force customer-submitted payments to be stored as pending.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $user = $this->user();
+
+        if ($user && !$user->isAdmin()) {
+            $this->merge([
+                'status' => 'pending',
+            ]);
+        }
+    }
 }

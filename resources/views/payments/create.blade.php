@@ -58,21 +58,37 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <label for="status">Status Pembayaran <span class="text-danger">*</span></label>
-                            <select class="form-control @error('status') is-invalid @enderror"
-                                    id="status"
-                                    name="status"
-                                    required>
-                                <option value="">-- Pilih Status --</option>
-                                <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending (Belum Lunas)</option>
-                                <option value="paid" {{ old('status', 'paid') == 'paid' ? 'selected' : '' }}>Paid (Lunas)</option>
-                                <option value="failed" {{ old('status') == 'failed' ? 'selected' : '' }}>Failed (Gagal)</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        @if(auth()->user()->isAdmin())
+                            <div class="form-group">
+                                <label for="status">Status Pembayaran <span class="text-danger">*</span></label>
+                                <select class="form-control @error('status') is-invalid @enderror"
+                                        id="status"
+                                        name="status"
+                                        required>
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending (Belum Lunas)</option>
+                                    <option value="paid" {{ old('status', 'paid') == 'paid' ? 'selected' : '' }}>Paid (Lunas)</option>
+                                    <option value="failed" {{ old('status') == 'failed' ? 'selected' : '' }}>Failed (Gagal)</option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label>Status Pembayaran</label>
+                                <p class="form-control-plaintext mb-1">
+                                    <span class="badge badge-warning">Pending (Menunggu Konfirmasi Admin)</span>
+                                </p>
+                                <small class="form-text text-muted">
+                                    Status pembayaran akan diperbarui oleh admin setelah verifikasi.
+                                </small>
+                                <input type="hidden" name="status" value="pending">
+                                @error('status')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endif
 
                         <hr>
 

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     /**
-     * Display a listing of users.
+     * Menampilkan daftar pengguna.
      *
      * @return \Illuminate\Http\Response
      */
@@ -40,7 +40,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new user.
+     * Menampilkan form untuk membuat pengguna baru.
      *
      * @return \Illuminate\Http\Response
      */
@@ -51,7 +51,7 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created user in storage.
+     * Menyimpan pengguna baru ke dalam penyimpanan.
      *
      * @param  \App\Http\Requests\User\StoreUserRequest  $request
      * @return \Illuminate\Http\Response
@@ -63,7 +63,7 @@ class UserController extends Controller
         // Hash password
         $data['password'] = Hash::make($data['password']);
 
-        // Handle image upload
+        // Handle unggahan gambar
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('images', 'public');
             $data['image'] = $imagePath;
@@ -76,14 +76,14 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified user.
+     * Show form untuk mengedit pengguna yang ditentukan.
      *
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
     {
-        // Prevent editing own account from user management
+        // Mencegah pengeditan akun sendiri dari manajemen pengguna
         if ($user->id === auth()->id()) {
             return redirect()->route('users.index')
                 ->with('error', 'Gunakan profile settings untuk mengubah akun Anda sendiri.');
@@ -94,7 +94,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified user in storage.
+     * update spesifik user di storage.
      *
      * @param  \App\Http\Requests\User\StoreUserRequest  $request
      * @param  \App\User  $user
@@ -102,7 +102,6 @@ class UserController extends Controller
      */
     public function update(StoreUserRequest $request, User $user)
     {
-        // Prevent editing own account from user management
         if ($user->id === auth()->id()) {
             return redirect()->route('users.index')
                 ->with('error', 'Gunakan profile settings untuk mengubah akun Anda sendiri.');
@@ -110,16 +109,13 @@ class UserController extends Controller
 
         $data = $request->validated();
 
-        // Only hash password if provided
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
         }
 
-        // Handle image upload
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($user->image && Storage::disk('public')->exists($user->image)) {
                 Storage::disk('public')->delete($user->image);
             }
@@ -135,32 +131,28 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified user from storage.
+     * Remove user yang ditentukan dari storage.
      *
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
     {
-        // Prevent deleting own account
         if ($user->id === auth()->id()) {
             return redirect()->back()
                 ->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
-        // Prevent deleting if user is associated with stylist profile
         if ($user->isStylist() && $user->stylist) {
             return redirect()->back()
                 ->with('error', 'Hapus stylist profile terlebih dahulu sebelum menghapus user.');
         }
 
-        // Prevent deleting if user has bookings as customer
         if ($user->isCustomer() && $user->bookings()->exists()) {
             return redirect()->back()
                 ->with('error', 'User ini memiliki riwayat booking. Tidak dapat dihapus.');
         }
 
-        // Delete image if exists
         if ($user->image && Storage::disk('public')->exists($user->image)) {
             Storage::disk('public')->delete($user->image);
         }

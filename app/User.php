@@ -38,7 +38,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Check if user is an admin.
+     * cek jika user adalah admin
      *
      * @return bool
      */
@@ -48,7 +48,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a stylist.
+     * cek jika user adalah stylist
      *
      * @return bool
      */
@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a customer.
+     * cek jika user adalah customer
      *
      * @return bool
      */

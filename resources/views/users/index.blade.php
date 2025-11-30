@@ -1,18 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="h3 mb-0"><i class="fas fa-users"></i> Kelola User</h1>
-                <a href="{{ route('users.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Tambah User
-                </a>
-            </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0"><i class="fas fa-users"></i> Kelola User</h1>
+        <a href="{{ route('users.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah User
+        </a>
+    </div>
 
-            <div class="card">
-                <div class="card-body">
                     {{-- Filters --}}
                     <form method="GET" action="{{ route('users.index') }}" class="mb-4">
                         <div class="row">
@@ -133,9 +128,4 @@
                             {{ $users->appends(request()->query())->links() }}
                         </div>
                     @endif
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection

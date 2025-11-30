@@ -58,13 +58,13 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <a href="{{ route('services.edit', $service) }}" class="btn btn-sm btn-outline-primary">
+                            <a href="{{ route('services.edit', $service) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
                             <form action="{{ route('services.destroy', $service) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus layanan ini?');">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger" type="submit">
+                                <button class="btn btn-sm btn-danger" type="submit">
                                     <i class="fas fa-trash"></i> Hapus
                                 </button>
                             </form>
