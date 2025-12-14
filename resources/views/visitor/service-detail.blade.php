@@ -1,9 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.visitor')
 
 @section('title', $service->name . ' - Barber Booking')
 
 @section('content')
 <div class="container">
+    <!-- Tombol Kembali -->
+    <div class="mb-4">
+        <a href="{{ route('visitor.search') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Kembali ke Daftar Layanan
+        </a>
+    </div>
+
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">

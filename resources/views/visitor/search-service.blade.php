@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.visitor')
 
 @section('title', 'Cari Layanan - Barber Booking')
 

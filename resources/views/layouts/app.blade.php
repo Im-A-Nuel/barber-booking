@@ -145,6 +145,88 @@
             margin-right: 5px;
         }
 
+        /* User Dropdown Styles */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown-btn {
+            background: #34495e;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-dropdown-btn:hover {
+            background: #3d566e;
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            min-width: 180px;
+            display: none;
+            z-index: 1001;
+            margin-top: 5px;
+        }
+
+        .user-dropdown-menu.show {
+            display: block;
+        }
+
+        .user-dropdown-menu a,
+        .user-dropdown-menu button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            color: #2c3e50;
+            text-decoration: none;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-dropdown-menu a:hover,
+        .user-dropdown-menu button:hover {
+            background: #ecf0f1;
+        }
+
+        .user-dropdown-menu a i,
+        .user-dropdown-menu button i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .user-dropdown-menu .dropdown-divider {
+            height: 1px;
+            background: #dee2e6;
+            margin: 0;
+        }
+
+        .user-dropdown-menu .logout-item {
+            color: #e74c3c;
+        }
+
+        .user-dropdown-menu .logout-item:hover {
+            background: #fdf2f2;
+        }
+
         /* Main Content Styles */
         .main-content {
             margin-left: 260px;
@@ -347,12 +429,24 @@
                     @endif
                     <span class="user-name">{{ Auth::user()->name }}</span>
                 </div>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <button type="button" class="logout-btn" onclick="confirmLogout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                <div class="user-dropdown">
+                    <button type="button" class="user-dropdown-btn" onclick="toggleUserDropdown()">
+                        <i class="fas fa-cog"></i> Pengaturan
+                        <i class="fas fa-chevron-down"></i>
                     </button>
-                </form>
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <a href="{{ route('password.change') }}">
+                            <i class="fas fa-key"></i> Ubah Password
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="button" class="logout-item" onclick="confirmLogout()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -404,6 +498,12 @@
 
         // Logout konfirmasi
         function confirmLogout() {
+            // Tutup dropdown dulu
+            const dropdown = document.getElementById('userDropdownMenu');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
             Swal.fire({
                 title: 'Konfirmasi Logout',
                 text: "Apakah Anda yakin ingin keluar dari sistem?",
@@ -420,6 +520,26 @@
                 }
             });
         }
+
+        // Toggle User Dropdown
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdownMenu');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('userDropdownMenu');
+            const dropdownBtn = document.querySelector('.user-dropdown-btn');
+            
+            if (dropdown && dropdownBtn) {
+                if (!dropdownBtn.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
     </script>
     @yield('scripts')
 </body>

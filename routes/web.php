@@ -1,7 +1,16 @@
 <?php
 
 
-Auth::routes();
+Auth::routes(['register' => false]); // Disable default register route
+
+// Custom Registration Routes
+Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('/register', 'Auth\RegisterController@register');
+Route::get('/register/verify', 'Auth\RegisterController@showVerifyForm')->name('register.verify.form');
+Route::post('/register/verify', 'Auth\RegisterController@verifyToken')->name('register.verify');
+Route::post('/register/resend', 'Auth\RegisterController@resendToken')->name('register.resend');
+Route::get('/register/password', 'Auth\RegisterController@showPasswordForm')->name('register.password.form');
+Route::post('/register/password', 'Auth\RegisterController@setPassword')->name('register.password');
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -70,6 +79,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payments/{booking}/gateway', 'PaymentController@createWithGateway')->name('payments.gateway');
     Route::get('/payments/{payment}/check-status', 'PaymentController@checkStatus')->name('payments.check-status');
     Route::post('/payments/{payment}/simulate-success', 'PaymentController@simulateSuccess')->name('payments.simulate-success');
+
+    // Change Password routes
+    Route::get('/password/change', 'PasswordController@edit')->name('password.change');
+    Route::put('/password/change', 'PasswordController@update')->name('password.change.update');
 });
 
 // Pengunjung routes (tanpa auth)

@@ -96,15 +96,6 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                <label class="form-check-label" for="remember">
-                                    {{ __('Remember Me') }}
-                                </label>
-                            </div>
-                        </div>
-
                         <div class="form-group mb-3">
                             <button type="submit" class="btn btn-primary btn-login btn-block">
                                 <i class="fas fa-sign-in-alt"></i> {{ __('Login') }}
