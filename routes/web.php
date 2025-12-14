@@ -18,7 +18,7 @@ Route::get('/', function () {
             return redirect()->route('dashboard.customer');
         }
     }
-    return redirect('/login');
+    return redirect()->route('visitor.search');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -71,6 +71,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payments/{payment}/check-status', 'PaymentController@checkStatus')->name('payments.check-status');
     Route::post('/payments/{payment}/simulate-success', 'PaymentController@simulateSuccess')->name('payments.simulate-success');
 });
+
+// Pengunjung routes (tanpa auth)
+Route::get('/services/search', 'VisitorController@searchService')->name('visitor.search');
+Route::get('/services/{id}/detail', 'VisitorController@actSearchService')->name('visitor.service.detail');
+Route::get('/guide', 'GuideController@index')->name('guide.index');
+
+
 
 // Midtrans 
 Route::post('/payments/midtrans/callback', 'PaymentController@midtransCallback')->name('payments.midtrans.callback');
