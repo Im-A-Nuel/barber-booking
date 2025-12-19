@@ -82,15 +82,10 @@
         @forelse($services as $service)
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm hover-card">
-                @if($service->image)
-                <img src="{{ asset('storage/' . $service->image) }}" class="card-img-top" alt="{{ $service->name }}"
+                <img src="{{ $service->image ? asset('storage/' . $service->image) : asset('images/no-image.jpg') }}"
+                     class="card-img-top"
+                     alt="{{ $service->name }}"
                      style="height: 200px; object-fit: cover;">
-                @else
-                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
-                     style="height: 200px;">
-                    <i class="fas fa-cut fa-4x text-white"></i>
-                </div>
-                @endif
                 <div class="card-body">
                     <h5 class="card-title">{{ $service->name }}</h5>
                     <div class="mb-2">
@@ -140,26 +135,6 @@
         </div>
     </div>
     @endif
-
-    <!-- Info Section -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <div class="card bg-light">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-info-circle"></i> Informasi</h5>
-                    <p class="mb-2">
-                        <i class="fas fa-check-circle text-success"></i>
-                        Untuk melakukan booking, silakan <a href="{{ route('login') }}">login</a>
-                        atau <a href="{{ route('register') }}">daftar</a> terlebih dahulu.
-                    </p>
-                    <p class="mb-0">
-                        <i class="fas fa-check-circle text-success"></i>
-                        Semua layanan dilakukan oleh stylist profesional dan berpengalaman.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <style>

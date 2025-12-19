@@ -109,6 +109,15 @@
                                 </a>
                             </div>
                         @endif
+
+                        <hr class="my-3">
+
+                        <div class="text-center">
+                            <span class="text-muted">Belum punya akun?</span>
+                            <a href="{{ route('register') }}" class="font-weight-bold">
+                                Daftar Sekarang
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>

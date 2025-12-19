@@ -71,11 +71,10 @@
                                         <tr>
                                             <td>{{ $user->id }}</td>
                                             <td>
-                                                @if($user->image)
-                                                    <img src="{{ asset('storage/' . $user->image) }}" alt="{{ $user->name }}" class="img-thumbnail" style="max-width: 50px; max-height: 50px;">
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
+                                                <img src="{{ $user->image ? asset('storage/' . $user->image) : asset('images/no-image.jpg') }}"
+                                                     alt="{{ $user->name }}"
+                                                     class="img-thumbnail"
+                                                     style="max-width: 50px; max-height: 50px; object-fit: cover;">
                                             </td>
                                             <td>
                                                 <strong>{{ $user->name }}</strong>

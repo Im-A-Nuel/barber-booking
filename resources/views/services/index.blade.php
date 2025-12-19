@@ -43,11 +43,10 @@
                 @forelse ($services as $service)
                     <tr>
                         <td>
-                            @if($service->image)
-                                <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->name }}" class="img-thumbnail" style="max-width: 60px; max-height: 60px;">
-                            @else
-                                <span class="text-muted">-</span>
-                            @endif
+                            <img src="{{ $service->image ? asset('storage/' . $service->image) : asset('images/no-image.jpg') }}"
+                                 alt="{{ $service->name }}"
+                                 class="img-thumbnail"
+                                 style="max-width: 60px; max-height: 60px; object-fit: cover;">
                         </td>
                         <td>{{ $service->name }}</td>
                         <td>{{ $service->duration_minutes }} menit</td>

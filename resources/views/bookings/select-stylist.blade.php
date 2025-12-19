@@ -41,11 +41,10 @@
                                     >
                                     <label class="custom-control-label w-100" for="stylist{{ $stylist->id }}">
                                         <div class="d-flex align-items-center">
-                                            @if($stylist->user->image)
-                                                <img src="{{ asset('storage/' . $stylist->user->image) }}" alt="{{ $stylist->user->name }}" class="rounded-circle mr-2" style="width: 50px; height: 50px; object-fit: cover;">
-                                            @else
-                                                <i class="fas fa-user-circle fa-2x mr-2"></i>
-                                            @endif
+                                            <img src="{{ $stylist->user->image ? asset('storage/' . $stylist->user->image) : asset('images/no-image.jpg') }}"
+                                                 alt="{{ $stylist->user->name }}"
+                                                 class="rounded-circle mr-2"
+                                                 style="width: 50px; height: 50px; object-fit: cover;">
                                             <div>
                                                 <strong>{{ $stylist->user->name }}</strong><br>
                                                 <small class="text-muted">

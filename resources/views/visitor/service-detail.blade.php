@@ -27,15 +27,10 @@
         <!-- Service Image -->
         <div class="col-md-5 mb-4">
             <div class="card shadow-sm">
-                @if($service->image)
-                <img src="{{ asset('storage/' . $service->image) }}" class="card-img-top" alt="{{ $service->name }}"
+                <img src="{{ $service->image ? asset('storage/' . $service->image) : asset('images/no-image.jpg') }}"
+                     class="card-img-top"
+                     alt="{{ $service->name }}"
                      style="width: 100%; height: 400px; object-fit: cover;">
-                @else
-                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
-                     style="height: 400px;">
-                    <i class="fas fa-cut fa-5x text-white"></i>
-                </div>
-                @endif
             </div>
         </div>
 
@@ -166,15 +161,10 @@
         @forelse($relatedServices as $related)
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm hover-card">
-                @if($related->image)
-                <img src="{{ asset('storage/' . $related->image) }}" class="card-img-top" alt="{{ $related->name }}"
+                <img src="{{ $related->image ? asset('storage/' . $related->image) : asset('images/no-image.jpg') }}"
+                     class="card-img-top"
+                     alt="{{ $related->name }}"
                      style="height: 200px; object-fit: cover;">
-                @else
-                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center"
-                     style="height: 200px;">
-                    <i class="fas fa-cut fa-4x text-white"></i>
-                </div>
-                @endif
                 <div class="card-body">
                     <h5 class="card-title">{{ $related->name }}</h5>
                     <div class="mb-2">
