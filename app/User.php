@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'role',
+        'name', 'username', 'email', 'image', 'password', 'role',
     ];
 
     /**
@@ -38,7 +39,18 @@ class User extends Authenticatable
     ];
 
     /**
-     * Check if user is an admin.
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
+    /**
+     * cek jika user adalah admin
      *
      * @return bool
      */
@@ -48,7 +60,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a stylist.
+     * cek jika user adalah stylist
      *
      * @return bool
      */
@@ -58,7 +70,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a customer.
+     * cek jika user adalah customer
      *
      * @return bool
      */

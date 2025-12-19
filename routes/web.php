@@ -1,23 +1,44 @@
 <?php
 
 
-Auth::routes();
+Auth::routes(['register' => false]); // Disable default register route
+
+// Custom Registration Routes
+Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('/register', 'Auth\RegisterController@register');
+Route::get('/register/verify', 'Auth\RegisterController@showVerifyForm')->name('register.verify.form');
+Route::post('/register/verify', 'Auth\RegisterController@verifyToken')->name('register.verify');
+Route::post('/register/resend', 'Auth\RegisterController@resendToken')->name('register.resend');
+Route::get('/register/password', 'Auth\RegisterController@showPasswordForm')->name('register.password.form');
+Route::post('/register/password', 'Auth\RegisterController@setPassword')->name('register.password');
 
 Route::get('/', function () {
     if (auth()->check()) {
-        if (auth()->user()->isAdmin() || auth()->user()->isStylist()) {
-            return redirect()->route('admin.bookings.index');
+        if (auth()->user()->isAdmin()) {
+            return redirect()->route('dashboard.admin');
+        }
+        if (auth()->user()->isStylist()) {
+            if (auth()->user()->stylist) {
+                return redirect()->route('dashboard.admin');
+            }
+            return redirect()->route('home');
         }
         if (auth()->user()->isCustomer()) {
-            return redirect()->route('bookings.index');
+            return redirect()->route('dashboard.customer');
         }
     }
-    return redirect('/login');
+    return redirect()->route('visitor.search');
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-// Admin only routes
+// Dashboard routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard/admin', 'DashboardController@admin')->name('dashboard.admin')->middleware('role:admin,stylist');
+    Route::get('/dashboard/customer', 'DashboardController@customer')->name('dashboard.customer')->middleware('role:customer');
+});
+
+// Admin 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('users', 'UserController')->except(['show']);
     Route::resource('services', 'ServiceController')->except(['show']);
@@ -33,7 +54,7 @@ Route::middleware(['auth', 'role:admin,stylist'])->prefix('admin')->name('admin.
     Route::patch('/bookings/{booking}/cancel', 'Admin\BookingManagementController@cancel')->name('bookings.cancel');
 });
 
-// Customer only routes
+// Customer 
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::get('/bookings', 'BookingController@index')->name('bookings.index');
     Route::get('/bookings/create', 'BookingController@create')->name('bookings.create');
@@ -58,7 +79,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payments/{booking}/gateway', 'PaymentController@createWithGateway')->name('payments.gateway');
     Route::get('/payments/{payment}/check-status', 'PaymentController@checkStatus')->name('payments.check-status');
     Route::post('/payments/{payment}/simulate-success', 'PaymentController@simulateSuccess')->name('payments.simulate-success');
+
+    // Change Password routes
+    Route::get('/password/change', 'PasswordController@edit')->name('password.change');
+    Route::put('/password/change', 'PasswordController@update')->name('password.change.update');
 });
 
-// Midtrans callback (no auth middleware needed for webhook)
+// Pengunjung routes (tanpa auth)
+Route::get('/services/search', 'VisitorController@searchService')->name('visitor.search');
+Route::get('/services/{id}/detail', 'VisitorController@actSearchService')->name('visitor.service.detail');
+Route::get('/guide', 'GuideController@index')->name('guide.index');
+
+
+
+// Midtrans 
 Route::post('/payments/midtrans/callback', 'PaymentController@midtransCallback')->name('payments.midtrans.callback');

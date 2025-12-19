@@ -27,6 +27,7 @@ class StoreServiceRequest extends FormRequest
             'name' => ['required', 'string', 'max:120'],
             'duration_minutes' => ['required', 'integer', 'between:10,480'],
             'price' => ['required', 'integer', 'min:0'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }

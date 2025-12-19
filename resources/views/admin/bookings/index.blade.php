@@ -1,21 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="mb-0">
-                        @if(auth()->user()->isAdmin())
-                            Kelola Semua Booking
-                        @else
-                            Kelola Booking Saya
-                        @endif
-                    </h4>
-                </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">
+            @if(auth()->user()->isAdmin())
+                <i class="fas fa-calendar-check"></i> Kelola Semua Booking
+            @else
+                <i class="fas fa-calendar-check"></i> Kelola Booking Saya
+            @endif
+        </h1>
+    </div>
 
-                <div class="card-body">
                     {{-- Filters --}}
                     <form method="GET" action="{{ route('admin.bookings.index') }}" class="mb-4">
                         <div class="row">
@@ -131,9 +126,4 @@
                             {{ $bookings->appends(request()->query())->links() }}
                         </div>
                     @endif
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection

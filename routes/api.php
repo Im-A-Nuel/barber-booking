@@ -16,3 +16,21 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Public API routes (tidak perlu autentikasi)
+Route::prefix('v1')->group(function () {
+    // Services
+    Route::get('/services', 'Api\ApiController@getServices');
+    Route::get('/services/{id}', 'Api\ApiController@getServiceById');
+
+    // Stylists
+    Route::get('/stylists', 'Api\ApiController@getStylists');
+    Route::get('/stylists/{id}', 'Api\ApiController@getStylistById');
+});
+
+// Protected API routes (perlu autentikasi)
+Route::prefix('v1')->middleware('auth:api')->group(function () {
+    // Bookings
+    Route::get('/bookings', 'Api\ApiController@getBookings');
+    Route::get('/bookings/{id}', 'Api\ApiController@getBookingById');
+});

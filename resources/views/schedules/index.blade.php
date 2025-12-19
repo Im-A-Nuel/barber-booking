@@ -57,13 +57,13 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <a href="{{ route('schedules.edit', $schedule) }}" class="btn btn-sm btn-outline-primary">
+                            <a href="{{ route('schedules.edit', $schedule) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
                             <form action="{{ route('schedules.destroy', $schedule) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus jadwal ini?');">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger" type="submit">
+                                <button class="btn btn-sm btn-danger" type="submit">
                                     <i class="fas fa-trash"></i> Hapus
                                 </button>
                             </form>

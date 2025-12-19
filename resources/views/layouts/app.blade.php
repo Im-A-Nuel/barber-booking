@@ -6,20 +6,302 @@
     <title>@yield('title', 'Barber Booking')</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            background: #2c3e50;
+            padding-top: 20px;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h3 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 15px 25px;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background: #34495e;
+            color: white;
+            border-left: 4px solid #3498db;
+            padding-left: 21px;
+        }
+
+        .sidebar-menu li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Top Header Styles */
+        .top-header {
+            position: fixed;
+            left: 260px;
+            right: 0;
+            top: 0;
+            height: 60px;
+            background: #34495e;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 999;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .top-header-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            color: white;
+        }
+
+        .clock {
+            font-size: 14px;
+            color: #ecf0f1;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info .user-icon {
+            width: 35px;
+            height: 35px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .logout-btn i {
+            margin-right: 5px;
+        }
+
+        /* User Dropdown Styles */
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown-btn {
+            background: #34495e;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-dropdown-btn:hover {
+            background: #3d566e;
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            min-width: 180px;
+            display: none;
+            z-index: 1001;
+            margin-top: 5px;
+        }
+
+        .user-dropdown-menu.show {
+            display: block;
+        }
+
+        .user-dropdown-menu a,
+        .user-dropdown-menu button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            color: #2c3e50;
+            text-decoration: none;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-dropdown-menu a:hover,
+        .user-dropdown-menu button:hover {
+            background: #ecf0f1;
+        }
+
+        .user-dropdown-menu a i,
+        .user-dropdown-menu button i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .user-dropdown-menu .dropdown-divider {
+            height: 1px;
+            background: #dee2e6;
+            margin: 0;
+        }
+
+        .user-dropdown-menu .logout-item {
+            color: #e74c3c;
+        }
+
+        .user-dropdown-menu .logout-item:hover {
+            background: #fdf2f2;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 260px;
+            margin-top: 60px;
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+            background: #ecf0f1;
+        }
+
+        .content-wrapper {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Guest Layout */
+        .guest-layout {
+            margin-left: 0;
+            margin-top: 0;
+        }
+
+        .guest-nav {
+            background: #2c3e50;
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .guest-nav .navbar-brand {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .guest-nav .nav-link {
+            color: #ecf0f1;
+            margin-left: 15px;
+        }
+
+        .guest-nav .nav-link:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -260px;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .top-header {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">
-            <i class="fas fa-cut"></i> Barber Booking
-        </a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                @guest
+    @guest
+        <!-- Guest Navigation -->
+        <nav class="navbar navbar-expand-lg guest-nav">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-cut"></i> Barber Booking
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">
                             <i class="fas fa-sign-in-alt"></i> Login
@@ -30,67 +312,146 @@
                             <i class="fas fa-user-plus"></i> Register
                         </a>
                     </li>
-                @else
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> {{ Auth::user()->name }} ({{ ucfirst(Auth::user()->role) }})
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="{{ route('home') }}">
-                                <i class="fas fa-home"></i> Dashboard
-                            </a>
-                            @if(Auth::user()->isAdmin())
-                                <a class="dropdown-item" href="{{ route('users.index') }}">
-                                    <i class="fas fa-users"></i> Kelola User
-                                </a>
-                                <a class="dropdown-item" href="{{ route('services.index') }}">
-                                    <i class="fas fa-list"></i> Kelola Service
-                                </a>
-                                <a class="dropdown-item" href="{{ route('stylists.index') }}">
-                                    <i class="fas fa-user-tie"></i> Kelola Stylist
-                                </a>
-                                <a class="dropdown-item" href="{{ route('schedules.index') }}">
-                                    <i class="fas fa-calendar-alt"></i> Kelola Jadwal
-                                </a>
-                            @endif
-                            @if(Auth::user()->isAdmin() || Auth::user()->isStylist())
-                                <a class="dropdown-item" href="{{ route('admin.bookings.index') }}">
-                                    <i class="fas fa-calendar-check"></i> Kelola Booking
-                                </a>
-                            @endif
-                            @if(Auth::user()->isCustomer())
-                                <a class="dropdown-item" href="{{ route('bookings.index') }}">
-                                    <i class="fas fa-calendar-check"></i> Booking Saya
-                                </a>
-                                <a class="dropdown-item" href="{{ route('bookings.create') }}">
-                                    <i class="fas fa-calendar-plus"></i> Buat Booking
-                                </a>
-                                <a class="dropdown-item" href="{{ route('payments.index') }}">
-                                    <i class="fas fa-money-bill-wave"></i> Riwayat Pembayaran
-                                </a>
-                            @endif
-                            @if(Auth::user()->isAdmin())
-                                <a class="dropdown-item" href="{{ route('payments.index') }}">
-                                    <i class="fas fa-money-bill-wave"></i> Semua Pembayaran
-                                </a>
-                            @endif
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                @endguest
-            </ul>
-        </div>
-    </nav>
+                </ul>
+            </div>
+        </nav>
 
-    <main class="py-4">
-        <div class="container">
+        <main class="py-4 guest-layout">
+            <div class="container">
+                @if (session('status'))
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="fas fa-check-circle"></i> {{ session('status') }}
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </div>
+                @endif
+
+                @yield('content')
+            </div>
+        </main>
+    @else
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-cut fa-2x mb-2"></i>
+                <h3>Barber Booking</h3>
+            </div>
+            <ul class="sidebar-menu">
+                @if(Auth::user()->isAdmin() || Auth::user()->isStylist())
+                    <li>
+                        <a href="{{ route('dashboard.admin') }}" class="{{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                @elseif(Auth::user()->isCustomer())
+                    <li>
+                        <a href="{{ route('dashboard.customer') }}" class="{{ request()->routeIs('dashboard.customer') ? 'active' : '' }}">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                @endif
+                @if(Auth::user()->isAdmin())
+                    <li>
+                        <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
+                            <i class="fas fa-users"></i> Kelola User
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('services.index') }}" class="{{ request()->routeIs('services.*') ? 'active' : '' }}">
+                            <i class="fas fa-list"></i> Kelola Service
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('stylists.index') }}" class="{{ request()->routeIs('stylists.*') ? 'active' : '' }}">
+                            <i class="fas fa-user-tie"></i> Kelola Stylist
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('schedules.index') }}" class="{{ request()->routeIs('schedules.*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-alt"></i> Kelola Jadwal
+                        </a>
+                    </li>
+                @endif
+                @if(Auth::user()->isAdmin() || Auth::user()->isStylist())
+                    <li>
+                        <a href="{{ route('admin.bookings.index') }}" class="{{ request()->routeIs('admin.bookings.*') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check"></i> Kelola Booking
+                        </a>
+                    </li>
+                @endif
+                @if(Auth::user()->isCustomer())
+                    <li>
+                        <a href="{{ route('bookings.index') }}" class="{{ request()->routeIs('bookings.index') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-check"></i> Booking Saya
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('bookings.create') }}" class="{{ request()->routeIs('bookings.create') ? 'active' : '' }}">
+                            <i class="fas fa-calendar-plus"></i> Buat Booking
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('payments.index') }}" class="{{ request()->routeIs('payments.*') ? 'active' : '' }}">
+                            <i class="fas fa-money-bill-wave"></i> Riwayat Pembayaran
+                        </a>
+                    </li>
+                @endif
+                @if(Auth::user()->isAdmin())
+                    <li>
+                        <a href="{{ route('payments.index') }}" class="{{ request()->routeIs('payments.*') ? 'active' : '' }}">
+                            <i class="fas fa-money-bill-wave"></i> Semua Pembayaran
+                        </a>
+                    </li>
+                @endif
+            </ul>
+        </aside>
+
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="top-header-right">
+                <div class="clock">
+                    <i class="fas fa-clock"></i>
+                    <span id="current-time"></span>
+                </div>
+                <div class="user-info">
+                    @if(Auth::user()->image)
+                        <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}" class="user-icon" style="object-fit: cover;">
+                    @else
+                        <div class="user-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    @endif
+                    <span class="user-name">{{ Auth::user()->name }}</span>
+                </div>
+                <div class="user-dropdown">
+                    <button type="button" class="user-dropdown-btn" onclick="toggleUserDropdown()">
+                        <i class="fas fa-cog"></i> Pengaturan
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <a href="{{ route('password.change') }}">
+                            <i class="fas fa-key"></i> Ubah Password
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="button" class="logout-item" onclick="confirmLogout()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Konten -->
+        <main class="main-content">
             @if (session('status'))
                 <div class="alert alert-success alert-dismissible fade show">
                     <i class="fas fa-check-circle"></i> {{ session('status') }}
@@ -105,12 +466,81 @@
                 </div>
             @endif
 
-            @yield('content')
-        </div>
-    </main>
+            <div class="content-wrapper">
+                @yield('content')
+            </div>
+        </main>
+    @endguest
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // jam real time
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+
+        // Update jam 
+        if (document.getElementById('current-time')) {
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        // Logout konfirmasi
+        function confirmLogout() {
+            // Tutup dropdown dulu
+            const dropdown = document.getElementById('userDropdownMenu');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: "Apakah Anda yakin ingin keluar dari sistem?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e74c3c',
+                cancelButtonColor: '#95a5a6',
+                confirmButtonText: 'Ya, Logout',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('logout-form').submit();
+                }
+            });
+        }
+
+        // Toggle User Dropdown
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdownMenu');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('userDropdownMenu');
+            const dropdownBtn = document.querySelector('.user-dropdown-btn');
+            
+            if (dropdown && dropdownBtn) {
+                if (!dropdownBtn.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+    </script>
     @yield('scripts')
 </body>
 </html>

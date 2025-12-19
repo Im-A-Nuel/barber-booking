@@ -1,18 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1 class="h3 mb-0"><i class="fas fa-users"></i> Kelola User</h1>
-                <a href="{{ route('users.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Tambah User
-                </a>
-            </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0"><i class="fas fa-users"></i> Kelola User</h1>
+        <a href="{{ route('users.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah User
+        </a>
+    </div>
 
-            <div class="card">
-                <div class="card-body">
                     {{-- Filters --}}
                     <form method="GET" action="{{ route('users.index') }}" class="mb-4">
                         <div class="row">
@@ -62,6 +57,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Foto</th>
                                         <th>Nama</th>
                                         <th>Email</th>
                                         <th>Username</th>
@@ -74,6 +70,12 @@
                                     @foreach($users as $user)
                                         <tr>
                                             <td>{{ $user->id }}</td>
+                                            <td>
+                                                <img src="{{ $user->image ? asset('storage/' . $user->image) : asset('images/no-image.jpg') }}"
+                                                     alt="{{ $user->name }}"
+                                                     class="img-thumbnail"
+                                                     style="max-width: 50px; max-height: 50px; object-fit: cover;">
+                                            </td>
                                             <td>
                                                 <strong>{{ $user->name }}</strong>
                                             </td>
@@ -125,9 +127,4 @@
                             {{ $users->appends(request()->query())->links() }}
                         </div>
                     @endif
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection

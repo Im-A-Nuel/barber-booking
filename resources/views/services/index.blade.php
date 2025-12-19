@@ -31,6 +31,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Gambar</th>
                     <th>Nama</th>
                     <th>Durasi</th>
                     <th>Harga</th>
@@ -41,6 +42,12 @@
             <tbody>
                 @forelse ($services as $service)
                     <tr>
+                        <td>
+                            <img src="{{ $service->image ? asset('storage/' . $service->image) : asset('images/no-image.jpg') }}"
+                                 alt="{{ $service->name }}"
+                                 class="img-thumbnail"
+                                 style="max-width: 60px; max-height: 60px; object-fit: cover;">
+                        </td>
                         <td>{{ $service->name }}</td>
                         <td>{{ $service->duration_minutes }} menit</td>
                         <td>Rp {{ number_format($service->price, 0, ',', '.') }}</td>
@@ -50,13 +57,13 @@
                             </span>
                         </td>
                         <td class="text-right">
-                            <a href="{{ route('services.edit', $service) }}" class="btn btn-sm btn-outline-primary">
+                            <a href="{{ route('services.edit', $service) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
                             <form action="{{ route('services.destroy', $service) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus layanan ini?');">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger" type="submit">
+                                <button class="btn btn-sm btn-danger" type="submit">
                                     <i class="fas fa-trash"></i> Hapus
                                 </button>
                             </form>
@@ -64,7 +71,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">Belum ada layanan.</td>
+                        <td colspan="6" class="text-center">Belum ada layanan.</td>
                     </tr>
                 @endforelse
             </tbody>

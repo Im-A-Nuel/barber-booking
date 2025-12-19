@@ -42,6 +42,7 @@ class StoreUserRequest extends FormRequest
                 'max:255',
                 Rule::unique('users')->ignore($userId),
             ],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'password' => [
                 $userId ? 'nullable' : 'required',
                 'string',
@@ -67,6 +68,9 @@ class StoreUserRequest extends FormRequest
             'email.required' => 'Email harus diisi.',
             'email.email' => 'Email harus valid.',
             'email.unique' => 'Email sudah terdaftar.',
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Format gambar harus jpeg, png, atau jpg.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
             'password.required' => 'Password harus diisi.',
             'password.min' => 'Password harus minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',

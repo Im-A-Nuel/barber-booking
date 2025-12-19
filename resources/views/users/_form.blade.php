@@ -56,6 +56,26 @@
 </div>
 
 <div class="form-group">
+    <label for="image">Foto Profil</label>
+    @if(isset($user) && $user->image)
+        <div class="mb-2">
+            <img src="{{ asset('storage/' . $user->image) }}" alt="User Image" class="img-thumbnail" style="max-width: 200px;">
+        </div>
+    @endif
+    <input
+        type="file"
+        class="form-control-file @error('image') is-invalid @enderror"
+        id="image"
+        name="image"
+        accept="image/*"
+    >
+    <small class="form-text text-muted">Format: JPG, PNG, JPEG. Maksimal 2MB.</small>
+    @error('image')
+        <div class="invalid-feedback d-block">{{ $message }}</div>
+    @enderror
+</div>
+
+<div class="form-group">
     <label for="role">Role <span class="text-danger">*</span></label>
     <select
         name="role"

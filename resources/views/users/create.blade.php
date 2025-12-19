@@ -13,7 +13,7 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('users.store') }}">
+                    <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data">
                         @csrf
                         @include('users._form', ['user' => null])
 

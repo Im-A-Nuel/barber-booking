@@ -23,7 +23,8 @@ class BookingManagementController extends Controller
         if (auth()->user()->isStylist()) {
             $stylist = auth()->user()->stylist;
             if (!$stylist) {
-                abort(403, 'Stylist profile not found.');
+                return redirect()->route('home')
+                    ->with('error', 'Profil stylist Anda belum dibuat. Silakan hubungi administrator untuk mengatur profil stylist Anda.');
             }
             $query->where('stylist_id', $stylist->id);
         }
@@ -54,7 +55,11 @@ class BookingManagementController extends Controller
         // Authorization: admin can confirm any, stylist only their own
         if (auth()->user()->isStylist()) {
             $stylist = auth()->user()->stylist;
-            if (!$stylist || $booking->stylist_id != $stylist->id) {
+            if (!$stylist) {
+                return redirect()->route('home')
+                    ->with('error', 'Profil stylist Anda belum dibuat. Silakan hubungi administrator untuk mengatur profil stylist Anda.');
+            }
+            if ($booking->stylist_id != $stylist->id) {
                 abort(403, 'Unauthorized to confirm this booking.');
             }
         }
@@ -82,7 +87,11 @@ class BookingManagementController extends Controller
         // Authorization: admin can complete any, stylist only their own
         if (auth()->user()->isStylist()) {
             $stylist = auth()->user()->stylist;
-            if (!$stylist || $booking->stylist_id != $stylist->id) {
+            if (!$stylist) {
+                return redirect()->route('home')
+                    ->with('error', 'Profil stylist Anda belum dibuat. Silakan hubungi administrator untuk mengatur profil stylist Anda.');
+            }
+            if ($booking->stylist_id != $stylist->id) {
                 abort(403, 'Unauthorized to complete this booking.');
             }
         }
@@ -110,7 +119,11 @@ class BookingManagementController extends Controller
         // Authorization: admin can cancel any, stylist only their own
         if (auth()->user()->isStylist()) {
             $stylist = auth()->user()->stylist;
-            if (!$stylist || $booking->stylist_id != $stylist->id) {
+            if (!$stylist) {
+                return redirect()->route('home')
+                    ->with('error', 'Profil stylist Anda belum dibuat. Silakan hubungi administrator untuk mengatur profil stylist Anda.');
+            }
+            if ($booking->stylist_id != $stylist->id) {
                 abort(403, 'Unauthorized to cancel this booking.');
             }
         }

@@ -125,6 +125,8 @@ class PaymentController extends Controller
         }
 
         $validated = $request->validated();
+        $isAdmin = auth()->user()->isAdmin();
+        $status = $isAdmin ? $validated['status'] : 'pending';
 
         try {
             DB::beginTransaction();
@@ -134,17 +136,17 @@ class PaymentController extends Controller
             $payment->booking_id = $booking->id;
             $payment->amount = $validated['amount'];
             $payment->method = $validated['method'];
-            $payment->status = $validated['status'];
+            $payment->status = $status;
 
             // Set paid_at if status is paid
-            if ($validated['status'] === 'paid') {
+            if ($status === 'paid') {
                 $payment->paid_at = now();
             }
 
             $payment->save();
 
             // Auto-update booking status to completed if payment is paid
-            if ($validated['status'] === 'paid' && $booking->status === Booking::STATUS_CONFIRMED) {
+            if ($status === 'paid' && $booking->status === Booking::STATUS_CONFIRMED) {
                 $booking->status = Booking::STATUS_COMPLETED;
                 $booking->save();
             }
